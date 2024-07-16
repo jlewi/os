@@ -12,6 +12,10 @@ environment:
             - build-base
             - busybox
             - ca-certificates-bundle
+            - flex
+            - flex-dev
+            - hwloc
+            - hwloc-dev
             - perl
             - gfortran
             - hwloc-dev
