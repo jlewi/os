@@ -1,0 +1,50 @@
+# Generated from https://git.alpinelinux.org/aports/plain/community/openmpi/APKBUILD
+package:
+    name: openmpi
+    version: 5.0.3
+    epoch: 0
+    description: Message passing library for high-performance computing
+    copyright:
+        - license: BSD-2-Clause AND MIT AND custom
+environment:
+    contents:
+        packages:
+            - build-base
+            - busybox
+            - ca-certificates-bundle
+            - perl
+            - gfortran
+            - hwloc-dev
+            - libevent-dev
+            - libgomp
+            - libtool
+            - zlib-dev
+            - python-3.12-dev
+pipeline:
+    - uses: git-checkout
+      with:
+        repository: https://github.com/open-mpi/ompi
+        tag: v${{package.version}}
+        expected-commit: 9cc951b192bf5064cc71a91fd93ab3af21a29994
+        recurse-submodules: true
+
+    - runs: |
+        perl autogen.pl
+        chmod +x configure
+    - uses: autoconf/configure
+    - uses: autoconf/make
+    - uses: autoconf/make-install
+    - uses: strip
+
+subpackages:
+    - name: openmpi-dev
+      pipeline:
+        - uses: split/dev
+      dependencies:
+        runtime:
+            - openmpi
+      description: openmpi dev
+    - name: openmpi-doc
+      pipeline:
+        - uses: split/manpages
+      description: openmpi manpages
